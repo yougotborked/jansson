@@ -159,6 +159,7 @@ void *json_object_iter_next(json_t *object, void *iter);
 const char *json_object_iter_key(void *iter);
 json_t *json_object_iter_value(void *iter);
 int json_object_iter_set_new(json_t *object, void *iter, json_t *value);
+json_t *json_object_find(json_t *object, const char *key, json_type t);
 
 #define json_object_foreach(object, key, value) \
     for(key = json_object_iter_key(json_object_iter(object)); \

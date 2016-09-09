@@ -332,6 +332,55 @@ static json_t *json_object_deep_copy(const json_t *object)
     return result;
 }
 
+json_t *json_object_find(json_t *object, const char *key, json_type t)
+{
+    void *iter;
+    const char* object_key;
+    json_t *value, *result;
+
+    result = NULL;
+    value = NULL;
+    iter = json_object_iter(object);
+
+    if (iter != NULL)
+    {
+
+        object_key = json_object_iter_key(iter);
+        value = json_object_iter_value(iter);
+
+        if (strcmp(key, object_key) == 0)
+        {
+            if (json_typeof(value) == t)
+            {
+                return value;
+            }
+        }
+        else
+        {
+            json_object_foreach(object, object_key, value)
+            {
+                if (strcmp(key, object_key) == 0)
+                {
+                    if (json_typeof(value) == t)
+                    {
+                        return value;
+                    }
+                }
+                else
+                {
+                    result = json_object_find(value, key, t);
+                }
+
+                if (result != NULL)
+                {
+                    return result;
+                }
+            }
+            return NULL;
+        }
+    }
+    return NULL;
+}
 
 /*** array ***/
 

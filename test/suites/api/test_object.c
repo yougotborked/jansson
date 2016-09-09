@@ -539,6 +539,25 @@ static void test_object_foreach_safe()
     json_decref(object);
 }
 
+static void test_object_find()
+{
+    json_t *search, *expected, *found;
+
+    expected = json_pack("[{s:i,s:i}]", "foo", 1, "bar", 2);
+    search = json_pack("{s:{s:s,s:[{s:i,s:i}],s:{s:i,s:i}}}", "aaa", "lorum", "ipsum", "fizbiz", "foo", 1, "bar", 2, "fazbaz", "fiz", 3, "biz", 4);
+
+    found = json_object_find(search, "fizbiz", JSON_ARRAY);
+
+    if (json_equal(expected, found) != 1)
+    {
+        fail("json_object_find failed to find the expected object");
+    }
+
+    json_decref(search);
+    json_decref(expected);
+    json_decref(found);
+}
+
 static void run_tests()
 {
     test_misc();
@@ -552,4 +571,5 @@ static void run_tests()
     test_preserve_order();
     test_object_foreach();
     test_object_foreach_safe();
+    test_object_find();
 }
